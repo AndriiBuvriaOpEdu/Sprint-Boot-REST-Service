@@ -32,7 +32,6 @@ public class ProductService extends BaseService<Product, ProductRepository> {
 			this.repostiory.save(product);
 		}
 		
-		
 		throw new RuntimeException("Product is already owned by another customer " + buyer.getName());
 	}
 
