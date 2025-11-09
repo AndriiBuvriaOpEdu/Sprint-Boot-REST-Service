@@ -38,7 +38,7 @@ public class Product {
 	public Customer getOwner() { return this.owner; }
 	
 	public void setName(String name) { this.name = name; }
-	public void getPrice(Number price) { this.price = price; }
+	public void setPrice(Number price) { this.price = price; }
 	public void setOwner(Customer owner) { this.owner = owner; }
 	
 	
