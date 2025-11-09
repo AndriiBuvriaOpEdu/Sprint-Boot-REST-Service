@@ -1,5 +1,8 @@
 package marketplace.product;
 
+import java.math.BigDecimal;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -15,30 +18,32 @@ public class Product {
 	
 	
 	private String name;
-	private Number price;
+	
+	@Column(columnDefinition = "DECIMAL(19, 2)")
+	private BigDecimal price;
 	
 	@ManyToOne(optional=true)
 	private Customer owner;
 	
 	Product() {}
 	
-	public Product(String name, Number price, Customer owner) {
+	public Product(String name, BigDecimal price, Customer owner) {
 		this.name = name;
         this.price = price;
         this.owner = owner;
 	}
 	
-	public Product(String name, Number price) {
+	public Product(String name, BigDecimal price) {
 		this(name, price, null);
 	}
 	
 	public String getName() { return this.name; }
 	public Long getId() { return this.id; }
-	public Number getPrice() { return this.price; }
+	public BigDecimal getPrice() { return this.price; }
 	public Customer getOwner() { return this.owner; }
 	
 	public void setName(String name) { this.name = name; }
-	public void setPrice(Number price) { this.price = price; }
+	public void setPrice(BigDecimal price) { this.price = price; }
 	public void setOwner(Customer owner) { this.owner = owner; }
 	
 	

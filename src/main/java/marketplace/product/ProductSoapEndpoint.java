@@ -73,7 +73,7 @@ public class ProductSoapEndpoint {
         marketplace.soap.product.Product soapProduct = new marketplace.soap.product.Product();
         soapProduct.setId(product.getId());
         soapProduct.setName(product.getName());
-        soapProduct.setPrice(java.math.BigDecimal.valueOf(product.getPrice().doubleValue()));
+        soapProduct.setPrice(product.getPrice());
         soapProduct.setOwnerId(product.getOwner() != null ? product.getOwner().getId() : null);
         return soapProduct;
     }

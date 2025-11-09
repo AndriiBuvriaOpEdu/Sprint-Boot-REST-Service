@@ -65,7 +65,7 @@ public class CustomerSoapEndpoint {
         marketplace.soap.customer.Customer soapCustomer = new marketplace.soap.customer.Customer();
         soapCustomer.setId(customer.getId());
         soapCustomer.setName(customer.getName());
-        soapCustomer.setMoney(java.math.BigDecimal.valueOf(customer.getMoney().doubleValue()));
+        soapCustomer.setMoney(customer.getMoney());
         return soapCustomer;
     }
 }
