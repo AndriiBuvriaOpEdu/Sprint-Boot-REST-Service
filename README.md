@@ -1,4 +1,17 @@
-Лабораторна робота на тему Spring boot rest service 2
+Для лаби 3
+
+Докер
+
+docker run -d --hostname my-rabbit --name some-rabbit -p 8080:15672 -p 5672:5672 rabbitmq:3-management
+
+REST ендпоынти для девтесту
+POST http://localhost:8081/api/customers
+
+DELETE http://localhost:8081/api/customers/1
+
+
+
+SOAP:
 
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
    <soapenv:Header/>
@@ -42,4 +55,5 @@
          <ownerId>1</ownerId>
       </CreateProductRequest>
    </soapenv:Body>
-</soapenv:Envelope
+</soapenv:Envelope>
+
