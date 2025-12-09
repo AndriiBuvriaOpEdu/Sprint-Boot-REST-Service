@@ -1,0 +1,6 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+   <soapenv:Header/>
+   <soapenv:Body xmlns="http://marketplace.com/customers">
+      <GetAllCustomersRequest/>
+   </soapenv:Body>
+</soapenv:Envelope>

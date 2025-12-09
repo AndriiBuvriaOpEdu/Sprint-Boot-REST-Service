@@ -7,12 +7,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import marketplace.messaging.EventProducer;
+
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
 	
 	@Autowired
 	private ProductService productService;
+	
+	@Autowired
+	private EventProducer eventProducer;
 	
 	@GetMapping
 	public ResponseEntity<List<Product>> all() {
@@ -30,12 +35,32 @@ public class ProductController {
 
     @PostMapping
     public Product createProduct(@RequestBody Product product) {
-        return this.productService.createOne(product);
+        Product savedProduct = this.productService.createOne(product);
+        eventProducer.sendProductCreatedEvent(savedProduct);
+        return savedProduct;
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
-        this.productService.deleteById(id);
+        Optional<Product> productOpt = this.productService.getById(id);
+        
+        if (productOpt.isPresent()) {
+            Product product = productOpt.get();
+            Long ownerId = product.getOwner() != null ? product.getOwner().getId() : null;
+            String ownerName = product.getOwner() != null ? product.getOwner().getName() : null;
+            
+            this.productService.deleteById(id);
+            
+            eventProducer.sendProductDeletedEvent(
+                product.getId(),
+                product.getName(),
+                product.getPrice(),
+                ownerId,
+                ownerName
+            );
+        } else {
+            this.productService.deleteById(id);
+        }
         
         return ResponseEntity.noContent().build();
     }

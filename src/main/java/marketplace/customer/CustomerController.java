@@ -11,14 +11,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import marketplace.messaging.EventProducer;
+
 @RestController
 @RequestMapping("/api/customers")
 public class CustomerController {
 
 	private final CustomerRepository repository;
+	private final EventProducer eventProducer;
 	
-	CustomerController(CustomerRepository repository) {
+	CustomerController(CustomerRepository repository, EventProducer eventProducer) {
 		this.repository = repository;
+		this.eventProducer = eventProducer;
 	}
 	
 	@GetMapping
@@ -28,7 +32,10 @@ public class CustomerController {
 	
 	@PostMapping
 	Customer newCustomer(@RequestBody Customer newCustomer) {
-		return repository.save(newCustomer);
+		Customer savedCustomer = repository.save(newCustomer);
+		eventProducer.sendCustomerCreatedEvent(savedCustomer);
+		
+		return savedCustomer;
 	}
   
     @GetMapping("/{id}")
@@ -44,15 +51,28 @@ public class CustomerController {
 	      .map(Customer -> {
 	        Customer.setName(newCustomer.getName());
 	        Customer.setMoney(newCustomer.getMoney());
-	        return repository.save(Customer);
+	        Customer savedCustomer = repository.save(Customer);
+	        eventProducer.sendCustomerUpdatedEvent(savedCustomer);
+
+	        return savedCustomer;
 	      })
 	      .orElseGet(() -> {
-	        return repository.save(newCustomer);
+	        Customer savedCustomer = repository.save(newCustomer);
+	        eventProducer.sendCustomerCreatedEvent(savedCustomer);
+			
+	        return savedCustomer;
 	      });
     }
 
 	@DeleteMapping("/{id}")
 	void deleteCustomer(@PathVariable Long id) {
-		repository.deleteById(id);
+		repository.findById(id).ifPresent(customer -> {
+			repository.deleteById(id);
+			eventProducer.sendCustomerDeletedEvent(
+				customer.getId(),
+				customer.getName(),
+				customer.getMoney()
+			);
+		});
 	}
 } 

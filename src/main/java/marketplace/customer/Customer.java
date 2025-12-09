@@ -1,7 +1,9 @@
 package marketplace.customer;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -13,11 +15,13 @@ public class Customer {
 	@GeneratedValue Long id;
 	
 	private String name;
-	private Number money;
+	
+	@Column(columnDefinition = "DECIMAL(19, 2)")
+	private BigDecimal money;
 	
 	Customer() {}
 	
-	public Customer(String name, Number money) {
+	public Customer(String name, BigDecimal money) {
 		this.name = name;
 		this.money = money;
 	}
@@ -32,7 +36,7 @@ public class Customer {
 	}
 	
 	
-	public Number getMoney() {
+	public BigDecimal getMoney() {
 		return this.money;
 	}
 	
@@ -44,7 +48,7 @@ public class Customer {
 		this.name = name;
 	}
 	
-	public void setMoney(Number money) {
+	public void setMoney(BigDecimal money) {
 		this.money = money;
 	}
 	
