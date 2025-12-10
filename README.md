@@ -1,3 +1,18 @@
+Лаба 4 ендпоінти:
+
+для токена
+http://localhost:8081/api/auth/generateToken
+
+юзери тестові:
+admin - admin123
+manager - manager123
+user - user123
+
+можна глянути в UserInitializer
+
+
+- - -- - -- -
+
 Branches:
 
 В main остання ЛБ№3 - sync with lab3
