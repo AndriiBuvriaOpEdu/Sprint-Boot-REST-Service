@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import marketplace.messaging.EventProducer;
@@ -34,6 +35,7 @@ public class ProductController {
     }
 
     @PostMapping
+    @PreAuthorize("@securityManager.isUser() or @securityManager.isAdmin()")
     public Product createProduct(@RequestBody Product product) {
         Product savedProduct = this.productService.createOne(product);
         eventProducer.sendProductCreatedEvent(savedProduct);
@@ -41,6 +43,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("@securityManager.isAdmin()")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         Optional<Product> productOpt = this.productService.getById(id);
         
