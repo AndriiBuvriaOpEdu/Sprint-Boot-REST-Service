@@ -2,6 +2,7 @@ package marketplace.customer;
 
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,6 +32,7 @@ public class CustomerController {
 	}
 	
 	@PostMapping
+	@PreAuthorize("@securityManager.isUser() or @securityManager.isAdmin()")
 	Customer newCustomer(@RequestBody Customer newCustomer) {
 		Customer savedCustomer = repository.save(newCustomer);
 		eventProducer.sendCustomerCreatedEvent(savedCustomer);
@@ -45,6 +47,7 @@ public class CustomerController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("@securityManager.isUser() or @securityManager.isAdmin()")
     Customer replaceCustomer(@RequestBody Customer newCustomer, @PathVariable Long id) {
     
 	    return repository.findById(id)
@@ -65,6 +68,7 @@ public class CustomerController {
     }
 
 	@DeleteMapping("/{id}")
+	@PreAuthorize("@securityManager.isAdmin()")
 	void deleteCustomer(@PathVariable Long id) {
 		repository.findById(id).ifPresent(customer -> {
 			repository.deleteById(id);
